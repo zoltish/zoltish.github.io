@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "coin.io",
+    "sha256_cert_fingerprints":
+    ["F7:45:E2:6A:EC:E4:5D:B3:32:11:99:2A:44:F4:DB:B6:18:CD:08:8A:E8:4E:84:07:9C:A2:97:2C:E9:55:E8:3C"]
+  }
+}]
