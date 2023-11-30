@@ -1,38 +1,36 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Lagom</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        a {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-        a:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lagom Authentication</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
 </head>
 <body>
-    <a href="">Continue to app</a>
+
+    <div class="row mt-3">
+        <div class="col"></div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <a href="" class="btn btn-primary">Open in app</a>
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
 
     <script>
-        setTimeout(function() {
-            window.location.href = "";
-        }, 50);
+        function pageRedirect() {
+            window.location.href ="";
+        }
+        setTimeout("pageRedirect()", 50);
     </script>
+</div>
 </body>
 </html>
