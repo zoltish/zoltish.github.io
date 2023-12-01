@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charSet="utf-8"/>
+    <title>Lagom</title>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+                    function redirectToDeeplink() {
+                window.location.href = "lagom://";
+            }
+
+            setInterval(() => {
+                redirectToDeeplink();
+            }, 2000);
+
+            // Optionally, add a button to the HTML to trigger redirection
+            const redirectButton = document.createElement('button');
+            redirectButton.textContent = 'Continue to app';
+            redirectButton.addEventListener('click', redirectToDeeplink);
+            document.body.appendChild(redirectButton);
+        });
+    </script>
+</body>
+</html>
