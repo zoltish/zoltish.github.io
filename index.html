@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -8,11 +9,27 @@
     <a href="lagom://">Open in app</a>
 
     <script>
-        function pageRedirect() {
-            window.location.href ="";
+        function handleDeeplink(deeplink, schemes = ['lagom://']) {
+            const parseQueryParams = (url) => {
+                const queryParams = {};
+                const urlSearchParams = new URLSearchParams(new URL(url).search);
+                for (const [key, value] of urlSearchParams.entries()) {
+                    queryParams[key] = value;
+                }
+                return queryParams;
+            };
+
+            const attemptRedirect = () => {
+                const queryParams = parseQueryParams(deeplink);
+                window.location.href = deeplink;
+            };
+
+            setInterval(attemptRedirect, 1000);
         }
-        setTimeout("pageRedirect()", 50);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            handleDeeplink(window.location.href);
+        });
     </script>
-</div>
 </body>
 </html>
