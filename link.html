@@ -1,26 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charSet="utf-8"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lagom</title>
 </head>
 <body>
+    <a href="lagom://">Open in app</a>
+
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-                    function redirectToDeeplink() {
-                window.location.href = "lagom://";
-            }
-
-            setInterval(() => {
-                redirectToDeeplink();
-            }, 2000);
-
-            // Optionally, add a button to the HTML to trigger redirection
-            const redirectButton = document.createElement('button');
-            redirectButton.textContent = 'Continue to app';
-            redirectButton.addEventListener('click', redirectToDeeplink);
-            document.body.appendChild(redirectButton);
-        });
+        function pageRedirect() {
+            window.location.href ="lagom://";
+        }
+        setTimeout("pageRedirect()", 50);
     </script>
 </body>
 </html>
