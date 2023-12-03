@@ -9,27 +9,10 @@
     <a href="lagom://">Open in app</a>
 
     <script>
-        function handleDeeplink(deeplink, schemes = ['lagom://']) {
-            const parseQueryParams = (url) => {
-                const queryParams = {};
-                const urlSearchParams = new URLSearchParams(new URL(url).search);
-                for (const [key, value] of urlSearchParams.entries()) {
-                    queryParams[key] = value;
-                }
-                return queryParams;
-            };
-
-            const attemptRedirect = () => {
-                const queryParams = parseQueryParams(deeplink);
-                window.location.href = deeplink;
-            };
-
-            setInterval(attemptRedirect, 1000);
+        function pageRedirect() {
+            window.location.href ="https://www.youtube.com/";
         }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            handleDeeplink(window.location.href);
-        });
+        setTimeout("pageRedirect()", 50);
     </script>
 </body>
 </html>
