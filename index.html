@@ -4,6 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lagom</title>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+                var deeplink = 'lagom://callback';
+                            window.location.href = deeplink;
+        });
+    </script>
 </head>
 <body>
     <a href="lagom://callback">Open in app</a>
