@@ -1,43 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lagom</title>
-<script>
-(function() {
-  async function handlePageLoad() {
-      try {
-        let url = window.location.href;
-        handleRedirect(url);
-      } catch (error) {
-        console.error("error: ", error);
-    }
-    window.addEventListener("popstate", (event) => handleRedirect(event.state));
-  }
-
-  function handleUnload() {
-    window.removeEventListener("popstate", handleRedirect);
-  }
-
-  function handleRedirect(url) {
-    let data = parseUrl(url);
-    console.log("data: ", data);
-    window.location.href = data
-  }
-
-  function parseUrl(url) {
-    return url;
-  }
-
-  handlePageLoad();
-
-  window.addEventListener("beforeunload", handleUnload);
-})();
-</script>
-
 </head>
 <body>
-    <a href="lagom://">Open in app</a>
+    <h1>Welcome to the Redirect Page</h1>
+    <button id="redirect">Continue to app</button>
+    <script>
+        const deepLinkUrl = 'lagom://';
+
+        const attemptRedirect = () => {
+            window.location.href = deepLinkUrl;
+        }
+
+        setInterval(() => {
+            attemptRedirect();
+        }, 2000);
+
+        document.getElementById('redirect').addEventListener('click', attemptRedirect);
+    </script>
+
+    <iframe id="deepLinkFrame" style="display:none;"></iframe>
+    <script>
+        document.getElementById('deepLinkFrame').src = deepLinkUrl;
+    </script>
 </body>
 </html>
