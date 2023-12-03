@@ -4,14 +4,40 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lagom</title>
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function() {
-                var deeplink = 'lagom://callback';
-                            window.location.href = deeplink;
-        });
-    </script>
+<script>
+(function() {
+  async function handlePageLoad() {
+      try {
+        let url = window.location.href;
+        handleRedirect(url);
+      } catch (error) {
+        console.error("error: ", error);
+    }
+    window.addEventListener("popstate", (event) => handleRedirect(event.state));
+  }
+
+  function handleUnload() {
+    window.removeEventListener("popstate", handleRedirect);
+  }
+
+  function handleRedirect(url) {
+    let data = parseUrl(url);
+    console.log("data: ", data);
+    window.location.href = data
+  }
+
+  function parseUrl(url) {
+    return url;
+  }
+
+  handlePageLoad();
+
+  window.addEventListener("beforeunload", handleUnload);
+})();
+</script>
+
 </head>
 <body>
-    <a href="lagom://callback">Open in app</a>
+    <a href="lagom://">Open in app</a>
 </body>
 </html>
