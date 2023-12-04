@@ -2,10 +2,39 @@
 <html>
 <head>
     <title>Lagom</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@900">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #redirect {
+            font-family: 'Lato', sans-serif;
+            border-radius: 14px; 
+            background-color: black; 
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Redirect Page</h1>
-    <button id="redirect">Continue to app</button>
+    <button id="redirect" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+        Continue to app
+    </button>
+
     <script>
         const deepLinkUrl = 'lagom://';
 
@@ -15,14 +44,9 @@
 
         setInterval(() => {
             attemptRedirect();
-        }, 2000);
+        }, 1000);
 
         document.getElementById('redirect').addEventListener('click', attemptRedirect);
-    </script>
-
-    <iframe id="deepLinkFrame" style="display:none;"></iframe>
-    <script>
-        document.getElementById('deepLinkFrame').src = deepLinkUrl;
     </script>
 </body>
 </html>
