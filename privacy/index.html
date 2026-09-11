@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy</title>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+
+<header>
+  <h1 id="title">Privacy Policy</h1>
+  <p class="meta" id="meta"></p>
+</header>
+
+<section id="picker" hidden>
+  <p class="lede">Which app is this about?</p>
+  <ul class="apps" id="app-list"></ul>
+</section>
+
+<main id="app" hidden></main>
+
+<footer id="footer"></footer>
+
+<script src="../apps.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const slug = new URLSearchParams(location.search).get('app');
+const app = APPS[slug];
+
+if (!app) {
+  $('meta').textContent = AUTHOR + ' · last updated ' + UPDATED;
+  $('picker').hidden = false;
+  for (const [key, a] of Object.entries(APPS)) {
+    $('app-list').insertAdjacentHTML('beforeend', `<li><a href="?app=${key}">${a.name}</a></li>`);
+  }
+  $('footer').textContent = AUTHOR;
+} else {
+  render(app);
+}
+
+function render(a) {
+  const procs = a.processors.map((k) => PROCESSORS[k]);
+  const play = PLAY(a.id);
+  const li = (items) => items.map((t) => `<li>${t}</li>`).join('');
+  const list = (arr) => arr.length < 2 ? arr.join('') : arr.slice(0, -1).join(', ') + ' and ' + arr.at(-1);
+  const names = list(procs.map((p) => p.name));
+  const rights = list(procs.map((p) => p.rights));
+  const plural = procs.length !== 1;
+
+  document.title = a.name + ' — Privacy Policy';
+  $('title').textContent = a.name + ' — Privacy Policy';
+  $('meta').textContent = 'Last updated ' + UPDATED;
+  $('app').hidden = false;
+
+  $('app').innerHTML = `
+<p class="lede">${a.name} is ${a.is}. ${a.lede}</p>
+
+<h2>Who is responsible</h2>
+<p>${a.name} is developed and published by ${AUTHOR}, an individual developer. For anything in this
+policy, including requests about your data, use the developer contact details published with the app
+on its <a href="${play}">Google Play listing</a>. Google requires those to be current, so they are the
+address that reaches me.</p>
+
+<h2>What stays on your device</h2>
+<p>Everything you create in ${a.name} is stored on your device and is never transmitted to me or to
+anyone else. That covers:</p>
+<ul>${li(a.local)}</ul>
+<p>There is no account, no sign-up, and no sync. I cannot see your ${a.thing}, and there is no server
+holding them.</p>
+
+${(a.sections || []).map((s) => `<h2>${s.title}</h2>\n<p>${s.body}</p>`).join('\n\n')}
+
+<h2>What does leave your device</h2>
+${procs.length === 0 ? `<p>Nothing. ${a.name} sends no data to me or to anyone working for me.</p>` : `
+<p>${procs.length === 1
+  ? `One thing, from an established provider acting on my behalf, and containing nothing you have ${a.made}.`
+  : `${COUNT[procs.length]} things, ${procs.length === 2 ? 'both' : 'all'} from established providers acting on my behalf, and ${procs.length === 2 ? 'neither' : 'none'} of them containing anything you have ${a.made}.`}</p>
+
+<table>
+  <thead><tr><th>Who</th><th>What they receive</th><th>Why</th></tr></thead>
+  <tbody>
+    ${procs.map((p) => `<tr><td>${p.name}</td><td>${fill(p.receives, a)}</td><td>${fill(p.why, a)}</td></tr>`).join('\n    ')}
+  </tbody>
+</table>
+
+<p>${procs.map((p) => p.region).filter(Boolean).join(' ')} ${procs.length === 1 ? 'The provider encrypts' : procs.length === 2 ? 'Both providers encrypt' : 'All providers encrypt'} data in transit. ${plural ? 'Their' : 'Its'} own polic${plural ? 'ies are' : 'y is'} at
+${list(procs.map((p) => `<a href="${p.policy}">${p.policy.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}</a>`))}.</p>
+`}
+${a.processors.includes('revenuecat') ? `
+<p>The purchase itself is handled by Google Play. I never see your payment details — Google does not
+give them to me, and ${a.name} never asks for them.</p>` : ''}
+
+<h2>What ${a.name} does not do</h2>
+<ul>
+  <li>No advertising, and no advertising identifier is read or transmitted.</li>
+  ${li(a.notDo || [])}
+  <li>No selling or renting of data, to anyone, ever.</li>
+  <li>No third-party sign-in, and no social features.</li>
+</ul>
+
+<h2>Permissions the app asks for</h2>
+<ul>${a.permissions.map(([name, why]) => `<li><strong>${name}</strong> — ${why}</li>`).join('')}</ul>
+
+<h2>Your rights</h2>
+<p>Under the GDPR you can ask for access to, correction of, or deletion of personal data held about
+you, and you can object to processing. In practice this concerns only ${rights || 'nothing at all'},
+since nothing else reaches me. Write to me using the developer contact details on ${a.name}'s Google
+Play listing and I will action it within 30 days. You can also complain to your national data
+protection authority; in Sweden that is
+<a href="https://www.imy.se/">Integritetsskyddsmyndigheten (IMY)</a>.</p>
+<p>Your ${a.thing} need no request: deleting one in the app deletes it outright, and uninstalling
+${a.name} removes them with the app. For what I can and cannot delete on request, and what to include
+so your record can be found, see
+<a href="../delete-data/?app=${slug}">Requesting deletion of your data</a>.</p>
+
+<h2>Legal basis and retention</h2>
+<p>${procs.map((p) => fill(p.basis, a)).join(' ')} Nothing else is processed by me at all.</p>
+
+<h2>Children</h2>
+<p>${a.name} is not directed at children under 13, and it collects nothing that would identify a
+child. If you believe a child has provided personal data, contact me and I will remove it.</p>
+
+${(a.trailing || []).map((s) => `<h2>${s.title}</h2>\n<p>${s.body}</p>`).join('\n\n')}
+
+<h2>Changes</h2>
+<p>If this policy changes, the date at the top changes with it. Material changes will be noted in the
+app's release notes.</p>`;
+
+  $('footer').textContent = a.name + ' · ' + AUTHOR;
+}
+</script>
+
+</body>
+</html>

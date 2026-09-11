@@ -4,56 +4,33 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Requesting deletion of your data</title>
+<link rel="stylesheet" href="../shared.css">
 <style>
-  :root { --ink:#16151c; --muted:#5c5b68; --rule:#dcdae2; --bg:#fff; --accent:#5457c7; --field:#f6f6f9; }
-  * { box-sizing:border-box; }
-  body { margin:0 auto; max-width:44rem; padding:48px 24px 80px; background:var(--bg); color:var(--ink);
-         font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
-  header { border-bottom:2px solid var(--ink); padding-bottom:16px; margin-bottom:32px; }
-  h1 { font-size:28px; margin:0 0 6px; letter-spacing:-0.3px; }
-  h2 { font-size:19px; margin:36px 0 10px; letter-spacing:-0.2px; }
-  .meta { margin:0; color:var(--muted); font-size:14px; }
-  a { color:var(--accent); }
-  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:15px; }
-  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--rule); vertical-align:top; }
-  th { font-size:12px; text-transform:uppercase; letter-spacing:0.6px; color:var(--muted);
-       border-bottom:1px solid var(--ink); }
-  ul { padding-left:1.2rem; }
-  li { margin:6px 0; }
-  .lede { font-size:17px; }
   label { display:block; font-size:14px; color:var(--muted); margin:16px 0 4px; }
-  input, select, textarea { width:100%; font:inherit; color:var(--ink); background:var(--field);
+  input, textarea { width:100%; font:inherit; color:var(--ink); background:var(--field);
          border:1px solid var(--rule); border-radius:6px; padding:9px 11px; }
   textarea { min-height:5.5em; resize:vertical; }
   .hint { font-size:13px; color:var(--muted); margin:4px 0 0; }
-  .apps { list-style:none; padding:0; }
-  .apps li { margin:10px 0; }
-  .apps a { font-size:18px; }
   pre.request { white-space:pre-wrap; background:var(--field); border:1px solid var(--rule); border-radius:6px;
        padding:14px; font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; margin:16px 0 8px; }
   .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
   button { font:inherit; padding:9px 16px; border-radius:6px; border:1px solid var(--ink); background:var(--ink);
        color:#fff; cursor:pointer; }
-  button.quiet { background:transparent; color:var(--ink); }
   .copied { font-size:14px; color:var(--muted); }
-  footer { margin-top:48px; padding-top:16px; border-top:1px solid var(--rule); color:var(--muted); font-size:14px; }
-  [hidden] { display:none !important; }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Requesting deletion of your data</h1>
-  <p class="meta" id="meta">Zoltan Demant &middot; last updated 11 September 2026</p>
+  <p class="meta" id="meta"></p>
 </header>
 
-<!-- No app chosen: pick one. -->
 <section id="picker" hidden>
   <p class="lede">Which app is this about?</p>
   <ul class="apps" id="app-list"></ul>
 </section>
 
-<!-- An app is chosen: everything below is rendered from its entry in APPS. -->
 <section id="app" hidden>
   <p class="lede" id="lede"></p>
 
@@ -101,81 +78,10 @@
   </div>
 </section>
 
-<footer id="footer">Zoltan Demant</footer>
+<footer id="footer"></footer>
 
+<script src="../apps.js"></script>
 <script>
-// One entry per published app. Adding an app is adding an entry here; the page renders the rest.
-//
-//   name       shown everywhere
-//   id         Play package id; builds the listing link
-//   policy     the app's privacy policy
-//   thing      plural noun for what the user creates in the app ("presets", "check-ins")
-//   local      bullets for what the user can delete themselves, on device
-//   remote     what a processor holds on my behalf, each with the fields the user must supply so I can
-//              find their record. No remote entries means nothing is deletable on request.
-//   purchases  true when Google Play sells anything in the app - adds the "what I cannot delete" note
-const APPS = {
-  ratio: {
-    name: 'Ratio',
-    id: 'app.ratio',
-    policy: 'https://zoltish.github.io/ratio-privacy/',
-    thing: 'presets',
-    lede: 'Almost everything Ratio holds is held by nobody but you, so almost none of it needs a ' +
-          'request. This page is honest about which is which.',
-    local: [
-      ['One preset', 'delete it in the app. It is gone immediately.'],
-      ['Everything', 'uninstall Ratio. Android removes the app\'s data with it.'],
-      ['The device backup', 'if Android backed Ratio up to your Google account, that copy is managed ' +
-        'from your Google account\'s backup settings. I have no access to it.'],
-    ],
-    remote: [PURCHASE],
-    purchases: true,
-  },
-  tideline: {
-    name: 'Tideline',
-    id: 'com.tideline',
-    policy: 'https://zoltish.github.io/tideline-privacy/',
-    thing: 'check-ins',
-    lede: 'Most of what Tideline holds is not held by anyone but you, so most of it needs no request ' +
-          'at all. This page is honest about which is which.',
-    local: [
-      ['One entry', 'open it in the app and delete it. It is gone immediately.'],
-      ['Everything', 'uninstall Tideline. Android removes the app\'s data with it.'],
-      ['A backup file you made', 'that file is wherever you put it. Delete it the way you would ' +
-        'delete any other file; I have no copy and no way to reach it.'],
-    ],
-    remote: [PURCHASE, CRASHES],
-    purchases: true,
-  },
-};
-
-// The processors, shared between apps. `fields` are what the form asks for when this row applies.
-function PURCHASE() {
-  return {
-    what: 'Your purchase record — an anonymous identifier and the fact that a purchase was made or restored',
-    who: 'RevenueCat, on my behalf',
-    when: 'Deleted when you ask',
-    fields: [{
-      key: 'order', label: 'Google Play order number',
-      hint: 'Looks like GPA.1234-5678-9012-34567. Google emails it at the time of purchase, and it is ' +
-            'listed under Payments & subscriptions in your Google account. Without it I cannot tell ' +
-            'which purchase record is yours.',
-    }],
-  };
-}
-function CRASHES() {
-  return {
-    what: 'Crash and freeze reports — a stack trace, device model, Android version, app version',
-    who: 'Sentry, on my behalf, in the EU',
-    when: 'Deleted automatically after 90 days, or sooner when you ask',
-    fields: [
-      { key: 'device', label: 'Your device model', hint: 'For example "Pixel 8" or "Galaxy S24".' },
-      { key: 'when', label: 'Roughly when it crashed', hint: 'A date, or "around mid-August". Reports carry ' +
-        'no identifier that ties them to a person, so this is how I find the ones that are yours.' },
-    ],
-  };
-}
-
 const $ = (id) => document.getElementById(id);
 const el = (tag, text) => { const e = document.createElement(tag); if (text != null) e.textContent = text; return e; };
 
@@ -183,43 +89,46 @@ const slug = new URLSearchParams(location.search).get('app');
 const app = APPS[slug];
 
 if (!app) {
+  $('meta').textContent = AUTHOR + ' · last updated ' + UPDATED;
   $('picker').hidden = false;
   for (const [key, a] of Object.entries(APPS)) {
     const li = el('li'); const link = el('a', a.name);
     link.href = '?app=' + key; li.append(link); $('app-list').append(li);
   }
+  $('footer').textContent = AUTHOR;
 } else {
   render(app);
 }
 
 function render(a) {
-  const remote = a.remote.map((r) => r());
-  const play = 'https://play.google.com/store/apps/details?id=' + a.id;
+  const procs = a.processors.map((k) => PROCESSORS[k]);
+  const play = PLAY(a.id);
 
   document.title = a.name + ' — Requesting deletion of your data';
-  $('meta').textContent = a.name + ' · last updated 11 September 2026';
+  $('meta').textContent = a.name + ' · last updated ' + UPDATED;
   $('app').hidden = false;
-  $('lede').textContent = a.lede;
+  $('lede').textContent = a.deleteLede;
 
   $('local-heading').textContent = 'Your ' + a.thing + ' — delete them yourself, right now';
   $('local-intro').textContent = 'Everything you create in ' + a.name + ' lives on your own device and ' +
     'is never sent to me or to anyone else. There is no account and no server copy, so there is ' +
     'nothing for me to delete and no request to make.';
-  for (const [what, how] of a.local) {
+  for (const [what, how] of a.deleteLocal) {
     const li = el('li'); li.append(el('strong', what), ' — ' + how); $('local-list').append(li);
   }
 
-  if (remote.length === 0) {
+  if (procs.length === 0) {
     $('nothing-remote').hidden = false; $('remote-table').hidden = true; $('request').hidden = true;
   }
-  for (const r of remote) {
-    const tr = el('tr'); tr.append(el('td', r.what), el('td', r.who), el('td', r.when)); $('remote-rows').append(tr);
+  for (const p of procs) {
+    const tr = el('tr'); tr.append(el('td', p.deletes.what), el('td', p.deletes.who), el('td', p.deletes.when));
+    $('remote-rows').append(tr);
   }
 
   for (const link of [$('play-link'), $('play-button')]) link.href = play;
-  $('cannot').hidden = !a.purchases;
+  $('cannot').hidden = !a.processors.includes('revenuecat');
 
-  const fields = remote.flatMap((r) => r.fields);
+  const fields = procs.flatMap((p) => p.fields);
   for (const f of fields) {
     const label = el('label', f.label); label.htmlFor = 'f-' + f.key;
     const input = el('input'); input.id = 'f-' + f.key; input.name = f.key; input.type = 'text';
@@ -233,7 +142,7 @@ function render(a) {
       '',
       'Please delete the data held about me for this app:',
     ];
-    for (const r of remote) lines.push('  - ' + r.what.split(' — ')[0] + ' (' + r.who.split(',')[0] + ')');
+    for (const p of procs) lines.push('  - ' + p.deletes.what.split(' — ')[0] + ' (' + p.name + ')');
     lines.push('');
     for (const f of fields) {
       const v = $('f-' + f.key).value.trim();
@@ -253,9 +162,8 @@ function render(a) {
     $('copied').hidden = false; setTimeout(() => { $('copied').hidden = true; }, 2000);
   });
 
-  $('footer').textContent = '';
-  const policy = el('a', 'Privacy policy'); policy.href = a.policy;
-  $('footer').append(a.name + ' · Zoltan Demant · ', policy);
+  const policy = el('a', 'Privacy policy'); policy.href = '../privacy/?app=' + slug;
+  $('footer').append(a.name + ' · ' + AUTHOR + ' · ', policy);
 }
 </script>
 
