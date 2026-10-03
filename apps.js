@@ -3,7 +3,7 @@
 //
 // Text fields may contain inline HTML (links, <strong>); the pages insert them as such.
 
-const UPDATED = '11 September 2026';
+const UPDATED = '3 October 2026';
 const AUTHOR = 'Zoltan Demant';
 const PLAY = (id) => 'https://play.google.com/store/apps/details?id=' + id;
 
@@ -55,6 +55,31 @@ const PROCESSORS = {
     ],
     rights: 'any crash reports',
   },
+  crashlytics: {
+    name: 'Firebase Crashlytics',
+    policy: 'https://firebase.google.com/support/privacy',
+    region: 'Crashlytics is run by Google, which may process its data in the United States and other ' +
+            'countries.',
+    receives: 'Crash reports, and reports of errors the app caught and recovered from: a stack trace, ' +
+              'your device model, your Android version, the {app} version, and a random identifier ' +
+              'Firebase creates for your installation. No name, no email, no account, and nothing you ' +
+              'have {made}.',
+    why: 'To find out that the app broke, and where, so it can be fixed.',
+    basis: 'Crash reports are processed under legitimate interest in keeping the app working, and are ' +
+           'retained by Crashlytics for 90 days.',
+    deletes: {
+      what: 'Crash and error reports — a stack trace, device model, Android version, app version and ' +
+            'an installation identifier',
+      who: 'Google, on my behalf',
+      when: 'Deleted automatically after 90 days, or sooner when you ask',
+    },
+    fields: [
+      { key: 'device', label: 'Your device model', hint: 'For example "Pixel 8" or "Galaxy S24".' },
+      { key: 'when', label: 'Roughly when it crashed', hint: 'A date, or "around mid-August". Reports ' +
+        'carry no identifier that ties them to a person, so this is how I find the ones that are yours.' },
+    ],
+    rights: 'any crash reports',
+  },
 };
 
 const APPS = {
@@ -65,7 +90,7 @@ const APPS = {
     thing: 'presets',          // plural: what the user creates
     made: 'built',             // past participle: what the user did to create it
     product: 'Pro',            // what Play sells inside the app
-    processors: ['revenuecat', 'sentry'],
+    processors: ['revenuecat', 'crashlytics'],
     lede: 'The timers you build stay on your device. Two things leave it — a record that you bought ' +
           'Pro, if you do, and a crash report, if the app breaks — and this policy explains both in full.',
     local: [
