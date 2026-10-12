@@ -69,6 +69,11 @@
     <p>Requests are actioned within 30 days, as the GDPR requires.</p>
   </div>
 
+  <div id="sent" hidden>
+    <h2>What went to others</h2>
+    <ul id="sent-list"></ul>
+  </div>
+
   <div id="cannot" hidden>
     <h2>What I cannot delete</h2>
     <p>Google is the merchant for anything bought through Google Play, and Google keeps its own record
@@ -102,6 +107,7 @@ if (!app) {
 
 function render(a) {
   const procs = a.processors.map((k) => PROCESSORS[k]);
+  const recips = (a.recipients || []).map((k) => RECIPIENTS[k]);
   const play = PLAY(a.id);
 
   document.title = a.name + ' — Requesting deletion of your data';
@@ -109,8 +115,8 @@ function render(a) {
   $('app').hidden = false;
   $('lede').textContent = a.deleteLede;
 
-  $('local-heading').textContent = 'Your ' + a.thing + ' — delete them yourself, right now';
-  $('local-intro').textContent = 'Everything you create in ' + a.name + ' lives on your own device and ' +
+  $('local-heading').textContent = a.deleteHeading || 'Your ' + a.thing + ' — delete them yourself, right now';
+  $('local-intro').textContent = a.deleteIntro || 'Everything you create in ' + a.name + ' lives on your own device and ' +
     'is never sent to me or to anyone else. There is no account and no server copy, so there is ' +
     'nothing for me to delete and no request to make.';
   for (const [what, how] of a.deleteLocal) {
@@ -123,6 +129,12 @@ function render(a) {
   for (const p of procs) {
     const tr = el('tr'); tr.append(el('td', p.deletes.what), el('td', p.deletes.who), el('td', p.deletes.when));
     $('remote-rows').append(tr);
+  }
+
+  $('sent').hidden = recips.length === 0;
+  for (const r of recips) {
+    const li = el('li'); li.append(el('strong', r.name)); li.insertAdjacentHTML('beforeend', ' — ' + fill(r.deletes, a));
+    $('sent-list').append(li);
   }
 
   for (const link of [$('play-link'), $('play-button')]) link.href = play;
