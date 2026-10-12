@@ -15,7 +15,8 @@ const PROCESSORS = {
     name: 'RevenueCat',
     policy: 'https://www.revenuecat.com/privacy',
     receives: 'Your purchase history and an anonymous, randomly generated identifier for your ' +
-              'installation. No name, no email, no account.',
+              'installation, together with the app version, Android version, device model and language ' +
+              'of the request, and the IP address it comes from. No name, no email, no account.',
     why: 'To know whether you have paid for {product}, and to restore that purchase on a new device.',
     basis: 'Purchase data is processed to perform the contract you enter into when you buy {product}, ' +
            'and is retained while the purchase remains valid and for as long as tax and accounting ' +
@@ -207,16 +208,18 @@ const APPS = {
     is: 'a home-screen widget that shows one useful thing at a time',
     thing: 'readings and settings',
     made: 'saved',
-    processors: [],
+    product: 'Pro',
+    processors: ['revenuecat'],
     recipients: ['metno'],
     lede: 'Glimt reads your calendar, your approximate location and your Health Connect data to decide ' +
-          'what the widget shows. All of it is read and kept on your device. One thing leaves it — a ' +
-          'rounded location, sent to a public weather service to get a forecast — and this policy ' +
-          'explains that in full.',
+          'what the widget shows. All of it is read and kept on your device. Two things leave it — a ' +
+          'rounded location, sent to a public weather service to get a forecast, and a record that you ' +
+          'bought Pro, held by the service that handles the purchase — and this policy explains both in full.',
     localIntro: '<p>Glimt reads data that already lives on your device to choose what the widget shows. ' +
                 'None of it is transmitted to me, and apart from the rounded location described under ' +
                 '&ldquo;What does leave your device&rdquo;, none of it is transmitted to anyone else. ' +
-                'Here is what it reads, and what it keeps:</p>',
+                'Health Connect data is read only if you have bought Pro. Here is what it reads, and ' +
+                'what it keeps:</p>',
     local: [
       'Calendar events — read live from your device\'s calendar each time the widget updates, for events ' +
         'from one hour ago to the end of tomorrow. The title, times, location and description are read; ' +
@@ -240,6 +243,8 @@ const APPS = {
         'logged the same way. Entries older than 7 days are deleted, and the latest 50 are listed on ' +
         'Glimt\'s settings screen.',
       'Your settings — the gym keyword you type, if any, and which calendars you have switched off.',
+      'Whether you have bought Pro — a yes or no, copied from the purchase service each time Glimt asks it, ' +
+        'so the widget can work without a network connection.',
     ],
     localOutro: '<p>There is no account, no sign-up and no sync. I cannot see any of this, and there is no ' +
                 'server of mine holding it. Glimt is excluded from Android\'s backup, so none of it is ' +
@@ -253,7 +258,10 @@ const APPS = {
             'shared with anyone, not transferred off your device, not sold, not used for advertising, ' +
             'including interest-based advertising, not disclosed to data brokers, and not used to ' +
             'assess credit or for lending. Glimt\'s use of Health Connect data follows Google Play\'s ' +
-            'User Data policy and its additional requirements for Health Connect.',
+            'User Data policy and its additional requirements for Health Connect. Reading Health Connect ' +
+            'is part of Glimt Pro, a one-time purchase: until you have bought it Glimt does not ask for ' +
+            'those permissions, and if the purchase is refunded or no longer valid Glimt stops reading ' +
+            'Health Connect and deletes the readings it had copied.',
     }, {
       title: 'Location and weather',
       body: 'Glimt asks only for approximate location, never precise location, and never reads it in ' +
@@ -262,6 +270,14 @@ const APPS = {
             'you open the app, Glimt asks MET Norway, the Norwegian Meteorological Institute, for the ' +
             'forecast at that saved position. The saved position, not a fresh reading, is what those ' +
             'in-between refreshes use.',
+    }, {
+      title: 'Buying Pro',
+      body: 'Pro is a one-time purchase made through Google Play, and I never see the payment ' +
+            'details. Glimt uses RevenueCat to check and restore it. Glimt starts RevenueCat only when you open ' +
+            'its settings screen, and then asks it whether you have bought Pro and what it costs; it also ' +
+            'contacts RevenueCat when you buy or restore. The widget and the background updates that keep ' +
+            'it current do not start it. Glimt turns off RevenueCat\'s optional diagnostics and its collection ' +
+            'of device identifiers, so no advertising identifier is read.',
     }, {
       title: 'Withdrawing access',
       body: 'Revoking a permission stops Glimt using that data, and Glimt then deletes what it had stored ' +
@@ -281,7 +297,9 @@ const APPS = {
       'No Health Connect data is shared, transferred off your device, sold, or used for advertising.',
     ],
     permissions: [
-      ['Internet', 'to fetch the weather forecast from MET Norway.'],
+      ['Internet and network state', 'to fetch the weather forecast from MET Norway, and to check, buy or ' +
+        'restore Pro.'],
+      ['Billing', 'to buy Pro through Google Play.'],
       ['Approximate location', 'to choose which forecast to ask for. Never precise, and never in the background.'],
       ['Read calendar', 'to show your next event and how busy your day is. Glimt cannot add, change or ' +
         'delete events.'],
@@ -296,14 +314,16 @@ const APPS = {
       body: 'Glimt shows figures it reads from Health Connect. It does not diagnose, treat, or advise, and ' +
             'nothing in it is a substitute for a qualified clinician.',
     }],
-    rightsLocal: 'Nothing Glimt holds needs a request: uninstalling it, or clearing its storage in Android\'s ' +
-                 'settings, removes everything it stores.',
-    deleteLede: 'Glimt keeps everything on your device and sends none of it to me, so none of it needs a ' +
-                'request. This page is honest about which is which, and about the one thing that went to ' +
-                'MET Norway.',
+    rightsLocal: 'Nothing Glimt holds on your device needs a request: uninstalling it, or clearing its ' +
+                 'storage in Android\'s settings, removes everything it stores. Only the purchase record at ' +
+                 'RevenueCat can be deleted on request.',
+    deleteLede: 'Glimt keeps what it reads on your device and sends none of it to me, so none of it needs a ' +
+                'request. This page is honest about which is which: the purchase record at RevenueCat is ' +
+                'the one thing I can delete on request, and the rounded location went to MET Norway.',
     deleteHeading: 'What Glimt holds — delete it yourself, right now',
-    deleteIntro: 'Everything Glimt stores lives on your own device and is never sent to me. There is no ' +
-                 'account and no server copy, so there is nothing for me to delete and no request to make.',
+    deleteIntro: 'Everything Glimt stores itself lives on your own device and is never sent to me. There ' +
+                 'is no account and no server copy of it, so there is nothing for me to delete and no ' +
+                 'request to make for this part.',
     deleteLocal: [
       ['Everything', 'uninstall Glimt. Android removes the app\'s data with it.'],
       ['Everything, keeping the app', 'in Android\'s settings open Apps, then Glimt, then Storage, and ' +
