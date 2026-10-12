@@ -264,10 +264,14 @@ const APPS = {
             'in-between refreshes use.',
     }, {
       title: 'Withdrawing access',
-      body: 'Revoking the calendar permission stops Glimt reading events. Revoking Health Connect access ' +
-            'stops it reading new data. Revoking the location permission stops it updating the saved ' +
-            'position. None of these erases what Glimt already holds, and forecast refreshes carry on ' +
-            'using the last saved position. To remove it, clear Glimt\'s storage or uninstall it — see ' +
+      body: 'Revoking a permission stops Glimt using that data, and Glimt then deletes what it had stored ' +
+            'from it. Calendar events are read live, so reading stops at once. Stored sleep, workout or ' +
+            'heart rate readings are deleted the next time Glimt syncs with Health Connect, which ' +
+            'includes the next time you open it. The saved location and the cached forecast are deleted ' +
+            'at the next weather refresh, within about 90 minutes while a widget is on your home screen ' +
+            'and sooner when you open Glimt, and no more forecasts are requested. The exception is the ' +
+            'decision log, which keeps past headlines for up to 7 days; clearing Glimt\'s storage or ' +
+            'uninstalling it removes them at once — see ' +
             '<a href="../delete-data/?app=glimt">Requesting deletion of your data</a>.',
     }],
     notDo: [
@@ -306,8 +310,10 @@ const APPS = {
         'choose Clear storage. That removes the saved location, the forecast, the copied Health Connect ' +
         'readings, the decision log and your settings.'],
       ['The original data', 'Glimt only reads your calendar and Health Connect. Events and health ' +
-        'records stay in those apps; delete them there. Revoking Glimt\'s permissions does not erase ' +
-        'what it has already copied, so clear its storage or uninstall it for that.'],
+        'records stay in those apps; delete them there. Revoking Glimt\'s permissions makes it ' +
+        'delete what it copied from that data the next time it refreshes or syncs, apart from the ' +
+        'decision log, which keeps up to 7 days of headlines. Clear its storage or uninstall it to ' +
+        'remove everything at once.'],
     ],
   },
 };
