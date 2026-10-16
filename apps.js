@@ -3,7 +3,7 @@
 //
 // Text fields may contain inline HTML (links, <strong>); the pages insert them as such.
 
-const UPDATED = '12 October 2026';
+const UPDATED = '16 October 2026';
 const AUTHOR = 'Zoltan Demant';
 const PLAY = (id) => 'https://play.google.com/store/apps/details?id=' + id;
 
@@ -228,7 +228,8 @@ const APPS = {
         'appears in the decision log below.',
       'Your next alarm — read from Android when the widget updates, to work out a bedtime. Not stored.',
       'Health Connect data — sleep sessions (start, end, time asleep), exercise sessions (start, end ' +
-        'and a category such as run, walk or swim), resting heart rate and heart rate variability. These ' +
+        'and a category such as run, walk or swim), step counts (a total for each hour), resting heart ' +
+        'rate and heart rate variability. These ' +
         'are copied from Health Connect into Glimt\'s own storage on your device for the last 15 days, ' +
         'so the widget can draw without asking Health Connect each time, and are replaced at each sync. ' +
         'Glimt only reads from Health Connect; it never writes to it.',
@@ -238,10 +239,10 @@ const APPS = {
         'received from MET Norway, with the time it was fetched. Replaced at each refresh.',
       'The decision log — for each widget update, the time, which card was shown and why, the headline ' +
         'and second line as displayed, and the cards that were considered. Those lines can contain what ' +
-        'the card says: the title of a calendar event, how long you slept, a workout and its length, or ' +
-        'your resting heart rate. When an update fails, a short technical description of the error is ' +
-        'logged the same way. Entries older than 7 days are deleted, and the latest 50 are listed on ' +
-        'Glimt\'s settings screen.',
+        'the card says: the title of a calendar event, how long you slept, a workout and its length, ' +
+        'your step count, or your resting heart rate. When an update fails, a short technical ' +
+        'description of the error is logged the same way. Entries older than 7 days are deleted, and ' +
+        'the latest 50 are listed on Glimt\'s settings screen.',
       'Your settings — the gym keyword you type, if any, and which calendars you have switched off.',
       'Whether you have bought Pro — a yes or no, copied from the purchase service each time Glimt asks it, ' +
         'so the widget can work without a network connection.',
@@ -251,10 +252,10 @@ const APPS = {
                 'copied to your Google account.</p>',
     sections: [{
       title: 'Health Connect data',
-      body: 'Glimt asks Health Connect for read access to sleep, exercise, resting heart rate and heart ' +
+      body: 'Glimt asks Health Connect for read access to sleep, exercise, steps, resting heart rate and heart ' +
             'rate variability, and, if you allow it, to read in the background so the widget stays ' +
             'current without you opening the app. It uses that data for one purpose: to show you the ' +
-            'sleep, workout and heart rate cards on your own widget. It stays on your device. It is not ' +
+            'sleep, workout, steps and heart rate cards on your own widget. It stays on your device. It is not ' +
             'shared with anyone, not transferred off your device, not sold, not used for advertising, ' +
             'including interest-based advertising, not disclosed to data brokers, and not used to ' +
             'assess credit or for lending. Glimt\'s use of Health Connect data follows Google Play\'s ' +
@@ -281,7 +282,7 @@ const APPS = {
     }, {
       title: 'Withdrawing access',
       body: 'Revoking a permission stops Glimt using that data, and Glimt then deletes what it had stored ' +
-            'from it. Calendar events are read live, so reading stops at once. Stored sleep, workout or ' +
+            'from it. Calendar events are read live, so reading stops at once. Stored sleep, workout, step or ' +
             'heart rate readings are deleted the next time Glimt syncs with Health Connect, which ' +
             'includes the next time you open it. The saved location and the cached forecast are deleted ' +
             'at the next weather refresh, within about 90 minutes while a widget is on your home screen ' +
@@ -303,8 +304,9 @@ const APPS = {
       ['Approximate location', 'to choose which forecast to ask for. Never precise, and never in the background.'],
       ['Read calendar', 'to show your next event and how busy your day is. Glimt cannot add, change or ' +
         'delete events.'],
-      ['Read Health Connect sleep, exercise, resting heart rate and heart rate variability', 'to show last ' +
-        'night\'s sleep, workouts and resting heart rate on the widget.'],
+      ['Read Health Connect sleep, exercise, steps, resting heart rate and heart rate variability', 'to show ' +
+        'last night\'s sleep, workouts, today\'s steps against your usual count by that time, and resting ' +
+        'heart rate on the widget.'],
       ['Read Health Connect data in the background', 'so the widget stays current without you opening ' +
         'Glimt. Optional; without it, Glimt updates health data when you open it.'],
       ['Run at startup', 'so the widget is redrawn after the phone restarts.'],
