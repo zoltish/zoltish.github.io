@@ -48,8 +48,8 @@
 
   <div id="request">
     <h2>How to ask</h2>
-    <p>Because there is no account, there is no name or email to look you up by. Fill this in and the
-    text it produces is everything I need to find and delete what is yours. Nothing you type here
+    <p><span id="request-why">Because there is no account, there is no name or email to look you up by. Fill this in and the
+    text it produces is everything I need to find and delete what is yours.</span> Nothing you type here
     leaves your browser — this page has no server. Copy the text and send it to the developer contact
     details published with the app on its <a id="play-link" href="#">Google Play listing</a>. Google
     requires those to be current, so they are the address that reaches me.</p>
@@ -137,6 +137,7 @@ function render(a) {
     $('sent-list').append(li);
   }
 
+  if (a.requestWhy) $('request-why').textContent = a.requestWhy;
   for (const link of [$('play-link'), $('play-button')]) link.href = play;
   $('cannot').hidden = !a.processors.includes('revenuecat');
 
