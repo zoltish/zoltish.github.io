@@ -3,7 +3,7 @@
 //
 // Text fields may contain inline HTML (links, <strong>); the pages insert them as such.
 
-const UPDATED = '16 October 2026';
+const UPDATED = '5 November 2026';
 const AUTHOR = 'Zoltan Demant';
 const PLAY = (id) => 'https://play.google.com/store/apps/details?id=' + id;
 
@@ -81,6 +81,34 @@ const PROCESSORS = {
     ],
     rights: 'any crash reports',
   },
+  firebase: {
+    name: 'Google Firebase',
+    policy: 'https://firebase.google.com/support/privacy',
+    region: 'Your board is stored in Belgium, in Firebase\'s europe-west1 region. Sign-in and push ' +
+            'messages run on Google\'s global systems, which may process data in the United States ' +
+            'and other countries.',
+    receives: 'Your board: the items you add, with their photos, checklists, dates and assignees, the ' +
+              'board\'s name, and the name you give yourself. A random identifier for your install and ' +
+              'a push token for your phone. If you keep your board with Google, your Google name, ' +
+              'email address and profile picture link.',
+    why: 'To store your board, keep two phones in step, restore your board on a new phone, and tell ' +
+         'your partner about an item.',
+    basis: 'Your board, account and push token are processed to provide the app you asked for. A ' +
+           'photo is deleted 7 days after its item is done, and an invite code stops working after ' +
+           '24 hours. Everything else stays until you delete it.',
+    deletes: {
+      what: 'Your board and account — your items, photos, name, push token, and the Google account ' +
+            'details your board is kept with',
+      who: 'Google, on my behalf',
+      when: 'Delete account in Settings removes them at once. If you ask me, I delete them within ' +
+            '30 days. Things you shared stay with your partner',
+    },
+    fields: [
+      { key: 'email', label: 'The Google email your board is kept with', hint: 'This is how I find ' +
+        'your board. It is the address shown beside "Kept with" in Settings.' },
+    ],
+    rights: 'your board and your account',
+  },
 };
 
 const RECIPIENTS = {
@@ -104,6 +132,22 @@ const RECIPIENTS = {
              'your phone straight to MET Norway; I never received it, hold no copy, and have no way to ' +
              'delete it. Ask MET Norway, under <a href="https://www.met.no/en/About-us/privacy">its ' +
              'privacy policy</a>.',
+  },
+  googlespeech: {
+    name: 'Google speech recognition',
+    policy: 'https://policies.google.com/privacy',
+    receives: 'What you say, from the moment you start the mic in the Add sheet until you stop it. ' +
+              'The words come back as text. This is the same service as voice typing on the Google ' +
+              'keyboard. {app} keeps no audio.',
+    why: 'To turn what you say into the text of an item.',
+    basis: 'Your voice is sent to Google on the basis of your consent, which you give by allowing the ' +
+           'microphone permission and starting the mic. {app} never keeps the audio. How long Google ' +
+           'keeps it is set by your Google account settings and Google\'s privacy policy.',
+    rights: 'Requests about speech recognition go to Google, under ' +
+            '<a href="https://policies.google.com/privacy">its privacy policy</a>. It went there ' +
+            'directly from your phone, so I hold no copy.',
+    deletes: 'What you said to the mic. It went from your phone straight to Google. I never received ' +
+             'it, hold no copy, and have no way to delete it. Manage it from your Google account.',
   },
 };
 
@@ -337,6 +381,77 @@ const APPS = {
         'decision log, which keeps up to 7 days of headlines. Clear its storage or uninstall it to ' +
         'remove everything at once.'],
     ],
+  },
+  skata: {
+    name: 'Skata',
+    id: 'com.skata',
+    is: 'one shared board for two',
+    thing: 'items',
+    made: 'added',
+    account: true,
+    processors: ['firebase'],
+    recipients: ['googlespeech'],
+    lede: 'Unlike my other apps, Skata stores what you add on a server, because that is what lets two ' +
+          'phones share a board and what brings a board back on a new phone. This policy explains ' +
+          'what is stored, who can see it, and how to delete it.',
+    localIntro: '<p>Most of Skata lives on the server, as described below. Only these things stay on ' +
+                'your phone alone:</p>',
+    local: [
+      'Your settings, such as the look you picked.',
+      'The reminders set on your phone, and an offline copy of your board.',
+    ],
+    localOutro: '<p>Android\'s device backup is switched off for Skata. Your phone\'s backup holds no ' +
+                'copy of it.</p>',
+    sections: [{
+      title: 'Your account',
+      body: 'You do not need to sign up to use Skata alone. The app creates a random, anonymous ' +
+            'identifier for your install and stores your board under it. To share a board, you keep ' +
+            'it with Google. That links your Google account to the identifier, so you can sign in ' +
+            'on a new phone and get your board back.',
+    }, {
+      title: 'Who can see your board',
+      body: 'Your partner sees everything on a shared board, and your name. Items you mark as private ' +
+            'are stored apart from the board, and your partner\'s phone cannot read them. When an ' +
+            'item is urgent or assigned to your partner, its text goes through Google\'s push ' +
+            'service to their phone. Your data is encrypted in transit and at rest, but it is not ' +
+            'end-to-end encrypted. As the developer, I have technical access to it.',
+    }],
+    leaveIntro: 'Everything you add to Skata goes to a provider acting on my behalf. Unlike my other ' +
+                'apps, this includes what you have added.',
+    recipientsIntro: 'One more thing goes from your phone directly to Google, if you use the mic, ' +
+                     'rather than through me or anyone working for me.',
+    notDo: [
+      'No analytics or usage tracking.',
+      'No crash reporting.',
+      'No location access and no contacts. Skata only sees a photo you pick or share to it.',
+    ],
+    permissions: [
+      ['Internet', 'to store your board and keep it in step with your partner\'s phone.'],
+      ['Notifications', 'to show reminders and your partner\'s urgent items.'],
+      ['Microphone', 'to turn what you say into an item, only while the mic in the Add sheet is on.'],
+      ['Run at startup', 'to set your reminders again after your phone restarts.'],
+    ],
+    rightsLocal: 'Deleting an item in the app deletes it from the server. Delete account in Settings ' +
+                 'removes your account and everything you hold. It appears once your board is kept ' +
+                 'with Google. Uninstalling Skata does not delete anything from the server.',
+    children: 'Skata is not directed at children under 13.',
+    deleteLede: 'Skata stores your board on a server, so this page matters more than it does for my ' +
+                'other apps. You can do almost all of this yourself, in the app.',
+    deleteHeading: 'Your items and account — delete them yourself, right now',
+    deleteIntro: 'Do this before you uninstall. Uninstalling Skata does not delete anything from the ' +
+                 'server. If you never kept your board with Google, nothing ties it to you, so I ' +
+                 'cannot find it afterwards.',
+    deleteLocal: [
+      ['One item', 'delete it in the app. It is gone from the server at once, for both of you.'],
+      ['A board you share', 'choose Leave board in Settings. Things you shared stay with your partner.'],
+      ['Your account and everything you hold', 'choose Delete account in Settings. You confirm with ' +
+        'Google first. It appears once your board is kept with Google.'],
+      ['A board you never kept with Google', 'delete its items in the app. There is no account to ' +
+        'delete.'],
+    ],
+    requestWhy: 'Use this if you can no longer open the app and your board was kept with Google. ' +
+                'Your Google email is how I find it. Fill this in and the text it produces is ' +
+                'everything I need.',
   },
 };
 
