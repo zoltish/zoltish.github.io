@@ -36,7 +36,7 @@
     </button>
 
     <script>
-        const deepLinkUrl = 'lagom://';
+        const deepLinkUrl = 'lagom://link' + window.location.search;
 
         const attemptRedirect = () => {
             window.location.href = deepLinkUrl;

@@ -6,11 +6,11 @@
     <title>Lagom</title>
 </head>
 <body>
-    <a href="lagom://">Open in app</a>
+    <a href="lagom://link" onclick="this.href = 'lagom://link' + window.location.search">Open in app</a>
 
     <script>
         function pageRedirect() {
-            window.location.href ="lagom://";
+            window.location.href = "lagom://link" + window.location.search;
         }
         setTimeout("pageRedirect()", 50);
     </script>
