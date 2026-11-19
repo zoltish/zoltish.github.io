@@ -26,12 +26,12 @@
 <script>
 const $ = (id) => document.getElementById(id);
 const slug = new URLSearchParams(location.search).get('app');
-const app = APPS[slug];
+const app = POLICIES[slug];
 
 if (!app) {
   $('meta').textContent = AUTHOR + ' · last updated ' + UPDATED;
   $('picker').hidden = false;
-  for (const [key, a] of Object.entries(APPS)) {
+  for (const [key, a] of Object.entries(POLICIES)) {
     $('app-list').insertAdjacentHTML('beforeend', `<li><a href="?app=${key}">${a.name}</a></li>`);
   }
   $('footer').textContent = AUTHOR;

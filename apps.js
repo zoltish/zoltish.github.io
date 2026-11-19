@@ -156,6 +156,12 @@ const APPS = {
     name: 'Ratio',
     id: 'app.ratio',
     is: 'an interval timer',
+    terms: [{
+      title: 'Training at your own risk',
+      body: 'Ratio times the intervals you set. It does not know your health or fitness, and it does ' +
+            'not tell you whether a workout is safe for you. You train at your own risk. If you have ' +
+            'a medical condition, ask a doctor before you start a new kind of training.',
+    }],
     thing: 'presets',          // plural: what the user creates
     made: 'built',             // past participle: what the user did to create it
     product: 'Pro',            // what Play sells inside the app
@@ -200,6 +206,13 @@ const APPS = {
     name: 'Tideline',
     id: 'com.tideline',
     is: 'a symptom diary',
+    terms: [{
+      title: 'Not medical advice',
+      body: 'Tideline records what you enter and summarises it. It does not diagnose, treat or ' +
+            'predict anything, and the premium report is a summary of your own entries, not a ' +
+            'medical assessment. Talk to a doctor about your symptoms. In an emergency, call 112 or ' +
+            'your local emergency number.',
+    }],
     thing: 'check-ins',
     made: 'logged',
     product: 'the premium report',
@@ -250,6 +263,12 @@ const APPS = {
     name: 'Glimt',
     id: 'app.glimt',
     is: 'a home-screen widget that shows one useful thing at a time',
+    terms: [{
+      title: 'What the widget shows',
+      body: 'Glimt shows information from your calendar, your Health Connect data and a public weather ' +
+            'service. That information can be late, incomplete or wrong. Do not rely on the widget ' +
+            'for decisions about safety, health or travel.',
+    }],
     thing: 'readings and settings',
     made: 'saved',
     product: 'Pro',
@@ -386,6 +405,12 @@ const APPS = {
     name: 'Skata',
     id: 'com.skata',
     is: 'one shared board for two',
+    terms: [{
+      title: 'What you add to a shared board',
+      body: 'Everything you add to a board is visible to the person you share it with. You are ' +
+            'responsible for what you add. Do not add anything unlawful, or anything you have no right ' +
+            'to share. I may remove content or close an account that breaks this.',
+    }],
     thing: 'items',
     made: 'added',
     account: true,
@@ -453,7 +478,27 @@ const APPS = {
                 'Your Google email is how I find it. Fill this in and the text it produces is ' +
                 'everything I need.',
   },
+  lagom: {
+    name: 'Lagom',
+    id: 'coin.io',
+    is: 'a personal-finance tracker',
+    product: 'Premium',
+    privacy: 'https://lagom-1337.ew.r.appspot.com/public/privacy_policy.html',
+    terms: [{
+      title: 'Not financial advice',
+      body: 'Lagom shows your own figures. It does not give financial, tax or investment advice. ' +
+            'Synced figures can be late or incomplete, and categories suggested by AI can be wrong. ' +
+            'Check important numbers with your bank.',
+    }, {
+      title: 'Bank sync',
+      body: 'Bank sync is provided by GoCardless, under its own terms, when you choose to link a bank. ' +
+            'The link only reads your accounts. It cannot move money. You can remove a linked bank in ' +
+            'the app at any time.',
+    }],
+  },
 };
+
+const POLICIES = Object.fromEntries(Object.entries(APPS).filter(([, a]) => a.local));
 
 // Fill {app}, {product}, {made} in processor text for one app.
 function fill(text, app) {
