@@ -109,6 +109,98 @@ const PROCESSORS = {
     ],
     rights: 'your board and your account',
   },
+  lagomauth: {
+    name: 'Firebase Authentication',
+    policy: 'https://firebase.google.com/support/privacy',
+    region: 'Firebase is run by Google, which may process its data in the United States and other ' +
+            'countries.',
+    receives: 'Your sign-in. Firebase creates a user identifier for you, either anonymously or with your ' +
+              'Google account, and if you sign in with Google it also holds your Google account details.',
+    why: 'To sign you in. The identifier is used to authenticate your requests to my server.',
+    basis: 'Your sign-in is processed to provide the app you asked for, and is kept until you delete it.',
+    deletes: {
+      what: 'Your sign-in — a user identifier and, if you signed in with Google, your Google account details',
+      who: 'Google, on my behalf',
+      when: 'Deleted when you ask',
+    },
+    fields: [
+      { key: 'email', label: 'The Google email you signed in with, if any', hint: 'This is how I find ' +
+        'your sign-in. Leave it empty if you only ever used Lagom anonymously.' },
+    ],
+    rights: 'your sign-in',
+  },
+  gocardless: {
+    name: 'GoCardless Bank Account Data',
+    policy: 'https://gocardless.com/privacy/',
+    receives: 'Your bank connection. You authorize it with your bank, and GoCardless provides your account ' +
+              'details and transactions to the app through my server. My server passes this data on to ' +
+              'your device and does not keep it.',
+    why: 'To connect your bank accounts and bring in your transactions.',
+    basis: 'Your bank connection is processed on the basis of your consent, which you give when you ' +
+           'connect a bank, and to provide the app you asked for. Disconnecting a bank removes the ' +
+           'connection from GoCardless.',
+    deletes: {
+      what: 'Your bank connection',
+      who: 'GoCardless, on my behalf',
+      when: 'Removed when you disconnect the bank in the app',
+    },
+    fields: [],
+    rights: 'your bank connection',
+  },
+  anthropic: {
+    name: 'Anthropic (Claude API)',
+    policy: 'https://www.anthropic.com/legal/privacy',
+    receives: 'If you use the AI features, the titles of new transactions, together with the names of your ' +
+              'categories, sent through my server. No account numbers, balances, your name or any user ' +
+              'identifier. My server does not keep the titles or the results.',
+    why: 'To clean up each transaction title and suggest a category for it.',
+    basis: 'Transaction titles are processed to provide the AI features you chose to use. If you stop ' +
+           'using them, no transaction titles are sent to Anthropic.',
+    deletes: {
+      what: 'Transaction titles and category names sent to the AI features',
+      who: 'Anthropic, on my behalf',
+      when: 'Not linked to you, so I cannot find them. Ask Anthropic under its privacy policy',
+    },
+    fields: [],
+    rights: 'any transaction titles sent to the AI features',
+  },
+  lagomrevenuecat: {
+    name: 'Google Play and RevenueCat',
+    policy: 'https://www.revenuecat.com/privacy',
+    receives: 'Your purchase history and an app user identifier. Google Play handles the payment, and I ' +
+              'do not receive your payment details.',
+    why: 'To handle subscriptions and purchases of {product}.',
+    basis: 'Purchase data is processed to perform the contract you enter into when you buy {product}, ' +
+           'and is retained while the purchase remains valid and for as long as tax and accounting ' +
+           'rules require.',
+    deletes: {
+      what: 'Your purchase record — an app user identifier and the fact that a purchase was made or restored',
+      who: 'RevenueCat, on my behalf',
+      when: 'Deleted when you ask',
+    },
+    fields: [{
+      key: 'order', label: 'Google Play order number',
+      hint: 'Looks like GPA.1234-5678-9012-34567. Google emails it at the time of purchase, and it is ' +
+            'listed under Payments & subscriptions in your Google account. Without it I cannot tell ' +
+            'which purchase record is yours.',
+    }],
+    rights: 'your purchase record',
+  },
+  googlecloud: {
+    name: 'Google Cloud',
+    policy: 'https://cloud.google.com/terms/cloud-privacy-notice',
+    receives: 'Your requests to my server, which it hosts. The server authenticates every request and does ' +
+              'not store your financial data.',
+    why: 'To host my server.',
+    basis: 'Requests are processed to provide the features you use.',
+    deletes: {
+      what: 'Requests to my server, which it does not keep as financial data',
+      who: 'Google, on my behalf',
+      when: 'Nothing financial is stored, so there is nothing to delete',
+    },
+    fields: [],
+    rights: 'requests to my server',
+  },
 };
 
 const RECIPIENTS = {
@@ -482,8 +574,75 @@ const APPS = {
     name: 'Lagom',
     id: 'coin.io',
     is: 'a personal-finance tracker',
+    thing: 'accounts, transactions and categories',
+    made: 'entered',
     product: 'Premium',
-    privacy: 'https://lagom-1337.ew.r.appspot.com/public/privacy_policy.html',
+    account: true,
+    processors: ['lagomauth', 'gocardless', 'anthropic', 'lagomrevenuecat', 'googlecloud', 'crashlytics'],
+    lede: 'Your accounts, transactions, categories and settings stay on your device. Data leaves it only ' +
+          'when a feature you use needs one of the services listed below, and this policy explains each.',
+    localIntro: '<p>Your accounts, transactions, categories and settings are stored locally on your ' +
+                'device in an SQL database. I do not store this information on my servers.</p>',
+    local: [
+      'Your accounts, transactions and categories.',
+      'Your settings.',
+    ],
+    localOutro: '<p>You can access, edit and delete all of it in the app.</p>',
+    leaveIntro: 'Data leaves your device only when a feature you use needs one of these services. Only ' +
+                'the data needed for that feature is sent. I do not sell your information, and data ' +
+                'is encrypted in transit between the app, my server and these services.',
+    sections: [{
+      title: 'Sign-in',
+      body: 'The app signs you in through Firebase Authentication, either anonymously or with your ' +
+            'Google account. Firebase gives me a user identifier, and, if you sign in with Google, your ' +
+            'Google account details. I use the identifier to authenticate requests to my server.',
+    }, {
+      title: 'Bank connections',
+      body: 'If you connect a bank account, the connection is made through GoCardless Bank Account Data. ' +
+            'You authorize the connection with your bank, and GoCardless provides your account details ' +
+            'and transactions to the app through my server. My server passes this data on to your ' +
+            'device and does not keep it.',
+    }, {
+      title: 'AI features',
+      body: 'If you use the AI features, the app sends the titles of new transactions, together with the ' +
+            'names of your categories, through my server to Anthropic\'s Claude API. Claude returns a ' +
+            'cleaned-up title and a suggested category for each transaction. I do not send account ' +
+            'numbers, balances, your name or any user identifier, and my server does not keep the ' +
+            'titles or the results. If you stop using the AI features, no transaction titles are sent ' +
+            'to Anthropic.',
+    }, {
+      title: 'Purchases',
+      body: 'Subscriptions are purchased through Google Play and managed with RevenueCat, which receive ' +
+            'your purchase history and an app user identifier. I do not receive your payment details.',
+    }, {
+      title: 'Security',
+      body: 'Data is encrypted in transit between the app, my server and third-party services. My ' +
+            'server authenticates every request and does not store your financial data.',
+    }],
+    notDo: [
+      'No analytics or usage tracking.',
+    ],
+    permissions: [
+      ['Internet', 'to sign you in, connect your bank, use the AI features, check your purchases and send a crash report.'],
+      ['Notifications', 'to show alerts from the app.'],
+    ],
+    rightsLocal: 'You can access, edit and delete the data stored on your device. You can disconnect a ' +
+                 'bank connection, which removes the connection from GoCardless. You can stop using the ' +
+                 'AI features, in which case no transaction titles are sent to Anthropic. Uninstalling ' +
+                 'Lagom removes the data on your device.',
+    trailing: [{
+      title: 'Crash reporting',
+      body: 'The app sends crash and error reports to Firebase Crashlytics to help improve its ' +
+            'reliability. Reports contain technical details such as the error, device model and ' +
+            'operating system version, and do not contain your financial data.',
+    }],
+    deleteLede: 'Your accounts, transactions and categories live on your own device, so most of what ' +
+                'Lagom holds needs no request. This page is honest about which is which.',
+    deleteLocal: [
+      ['Your accounts, transactions and categories', 'delete them in the app. They are gone immediately.'],
+      ['A bank connection', 'disconnect it in the app. That removes the connection from GoCardless.'],
+      ['Everything on your device', 'uninstall Lagom. Android removes the app\'s data with it.'],
+    ],
     terms: [{
       title: 'Not financial advice',
       body: 'Lagom shows your own figures. It does not give financial, tax or investment advice. ' +
