@@ -91,12 +91,12 @@ const $ = (id) => document.getElementById(id);
 const el = (tag, text) => { const e = document.createElement(tag); if (text != null) e.textContent = text; return e; };
 
 const slug = new URLSearchParams(location.search).get('app');
-const app = APPS[slug];
+const app = POLICIES[slug];
 
 if (!app) {
   $('meta').textContent = AUTHOR + ' · last updated ' + UPDATED;
   $('picker').hidden = false;
-  for (const [key, a] of Object.entries(APPS)) {
+  for (const [key, a] of Object.entries(POLICIES)) {
     const li = el('li'); const link = el('a', a.name);
     link.href = '?app=' + key; li.append(link); $('app-list').append(li);
   }

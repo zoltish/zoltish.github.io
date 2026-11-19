@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms of Use</title>
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+
+<header>
+  <h1 id="title">Terms of Use</h1>
+  <p class="meta" id="meta"></p>
+</header>
+
+<section id="picker" hidden>
+  <p class="lede">Which app is this about?</p>
+  <ul class="apps" id="app-list"></ul>
+</section>
+
+<main id="app" hidden></main>
+
+<footer id="footer"></footer>
+
+<script src="../apps.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const slug = new URLSearchParams(location.search).get('app');
+const app = APPS[slug];
+const CONTACT = 'info@progression.app';
+const TERMS_UPDATED = '19 November 2026';
+
+if (!app) {
+  $('meta').textContent = AUTHOR + ' · last updated ' + TERMS_UPDATED;
+  $('picker').hidden = false;
+  for (const [key, a] of Object.entries(APPS)) {
+    $('app-list').insertAdjacentHTML('beforeend', `<li><a href="?app=${key}">${a.name}</a></li>`);
+  }
+  $('footer').textContent = AUTHOR;
+} else {
+  render(app);
+}
+
+function render(a) {
+  const privacy = a.privacy || `../privacy/?app=${slug}`;
+  const sections = (items) => items.map((s) => `<h2>${s.title}</h2>\n<p>${s.body}</p>`).join('\n\n');
+
+  document.title = a.name + ' — Terms of Use';
+  $('title').textContent = a.name + ' — Terms of Use';
+  $('meta').textContent = 'Last updated ' + TERMS_UPDATED;
+  $('app').hidden = false;
+
+  $('app').innerHTML = `
+<p class="lede">${a.name} is ${a.is}. These terms apply when you install or use it. They are short on
+purpose. If you do not agree with them, do not use the app.</p>
+
+<h2>Who you are dealing with</h2>
+<p>${a.name} is developed and published by ${AUTHOR}, an individual developer in Sweden. You can reach
+me at <a href="mailto:${CONTACT}">${CONTACT}</a>.</p>
+
+<h2>Using the app</h2>
+<p>You may use ${a.name} for your own, personal purposes. Do not copy, resell or redistribute the app,
+and do not try to break its purchase checks or the services it talks to. The app, its design and its
+name stay mine.</p>
+
+<h2>Purchases and subscriptions</h2>
+<p>${a.name} is free to install. ${a.product ? `${a.product[0].toUpperCase() + a.product.slice(1)} is` : 'Some features are'}
+sold inside the app through Google Play, and Google Play's terms apply to the payment. The price, and
+for a subscription its billing period, show before you buy.</p>
+<ul>
+  <li>A subscription renews automatically at the end of each period until you cancel it.</li>
+  <li>Cancel any time in Google Play, under Payments &amp; subscriptions. You keep access until the
+  period you paid for ends.</li>
+  <li>The purchase is supplied at once. By buying, you ask for that, and you accept that your 14-day
+  right of withdrawal ends when it is supplied.</li>
+  <li>Refunds follow <a href="https://support.google.com/googleplay/answer/2479637">Google Play's refund
+  policy</a>. If something you paid for does not work, write to me and I will make it right.</li>
+</ul>
+
+<h2>Your data</h2>
+<p>What you create in ${a.name} stays yours. How the app handles it is in the
+<a href="${privacy}">privacy policy</a>. Keep your own backup of anything you cannot afford to lose.</p>
+
+${sections(a.terms || [])}
+
+<h2>No guarantees</h2>
+<p>I build ${a.name} with care, but it is provided as it is. I do not promise that it is free of errors,
+that it is always available, or that it suits a particular purpose. Features can change or be removed
+in updates.</p>
+
+<h2>Liability</h2>
+<p>I am not liable for indirect loss, such as lost data, lost profit or lost time. My total liability
+for ${a.name} is limited to what you paid for it in the last 12 months. Nothing in these terms limits
+liability that the law does not allow me to limit, such as for gross negligence or intent, or any
+right you have as a consumer under mandatory law.</p>
+
+<h2>Changes</h2>
+<p>If these terms change, the date at the top changes with it. Material changes will be noted in the
+app's release notes. If you keep using ${a.name} after a change, the new terms apply.</p>
+
+<h2>Law and disputes</h2>
+<p>Swedish law applies. If you live in another EU country, you also keep the protection of your own
+country's consumer law. Write to me first. If we cannot agree, you can take the dispute to the Swedish
+National Board for Consumer Disputes (<a href="https://www.arn.se/">ARN</a>) or a Swedish court.</p>`;
+
+  $('footer').textContent = a.name + ' · ' + AUTHOR;
+}
+</script>
+
+</body>
+</html>
