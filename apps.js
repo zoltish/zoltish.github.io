@@ -308,7 +308,7 @@ const APPS = {
     thing: 'check-ins',
     made: 'logged',
     product: 'the premium report',
-    processors: ['revenuecat', 'sentry'],
+    processors: ['revenuecat', 'crashlytics'],
     lede: 'The symptoms you log are the most sensitive thing this app holds, and they never leave ' +
           'your device. This policy explains that in full, and is honest about the two things that do ' +
           'leave it.',
@@ -323,6 +323,12 @@ const APPS = {
             'wherever you choose to put it, and from that point it is in your hands — if you place it ' +
             'in a cloud folder, it goes to that cloud provider under their terms, not mine. Restoring ' +
             'reads a file back in and never deletes what is already there.',
+    }, {
+      title: 'Crash reports',
+      body: 'Tideline asks on first launch whether to send crash reports, which are on by default. ' +
+            'They are sent under legitimate interest in keeping the app working, and you can switch ' +
+            'them off at any time under Privacy in Settings. Until the app has read your choice, ' +
+            'nothing is sent.',
     }, {
       title: 'The doctor\'s report',
       body: 'The report is generated on your device from your own check-ins and is shared only if and ' +
