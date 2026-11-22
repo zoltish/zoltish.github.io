@@ -3,7 +3,7 @@
 //
 // Text fields may contain inline HTML (links, <strong>); the pages insert them as such.
 
-const UPDATED = '5 November 2026';
+const UPDATED = '22 November 2026';
 const AUTHOR = 'Zoltan Demant';
 const PLAY = (id) => 'https://play.google.com/store/apps/details?id=' + id;
 
@@ -243,6 +243,17 @@ const RECIPIENTS = {
   },
 };
 
+// The "Crash reports" section is the same in every app that has the Settings switch.
+const crashReports = (name) => ({
+  title: 'Crash reports',
+  body: name + ' sends crash reports through Firebase Crashlytics. They are on by default, and ' +
+        'the app does not ask you first. You can switch them off at any time with "Send crash ' +
+        'reports" in Settings. They are sent under legitimate interest in keeping the app working. ' +
+        'A report holds the error and your device model, never anything you enter in the app. ' +
+        'If Google Play\'s age signals show that the account belongs to a minor, ' + name + ' keeps ' +
+        'crash reports off and the switch stays off.',
+});
+
 const APPS = {
   ratio: {
     name: 'Ratio',
@@ -271,7 +282,7 @@ const APPS = {
             'switched on in your Android settings. That backup goes to your own Google account under ' +
             'Google\'s terms, not mine, and it is what restores your presets when you set up a new ' +
             'phone. You control it from Android\'s backup settings, and I never see it.',
-    }],
+    }, crashReports('Ratio')],
     notDo: [
       'No analytics or usage tracking. I do not know which presets you run or how often.',
       'No location access, no contacts, no photos, no microphone, no health or sensor data.',
@@ -308,7 +319,7 @@ const APPS = {
     thing: 'check-ins',
     made: 'logged',
     product: 'the premium report',
-    processors: ['revenuecat', 'sentry'],
+    processors: ['revenuecat', 'crashlytics'],
     lede: 'The symptoms you log are the most sensitive thing this app holds, and they never leave ' +
           'your device. This policy explains that in full, and is honest about the two things that do ' +
           'leave it.',
@@ -323,7 +334,7 @@ const APPS = {
             'wherever you choose to put it, and from that point it is in your hands — if you place it ' +
             'in a cloud folder, it goes to that cloud provider under their terms, not mine. Restoring ' +
             'reads a file back in and never deletes what is already there.',
-    }, {
+    }, crashReports('Tideline'), {
       title: 'The doctor\'s report',
       body: 'The report is generated on your device from your own check-ins and is shared only if and ' +
             'when you choose to share it. It is not uploaded anywhere.',
@@ -630,12 +641,7 @@ const APPS = {
                  'bank connection, which removes the connection from GoCardless. You can stop using the ' +
                  'AI features, in which case no transaction titles are sent to Anthropic. Uninstalling ' +
                  'Lagom removes the data on your device.',
-    trailing: [{
-      title: 'Crash reporting',
-      body: 'The app sends crash and error reports to Firebase Crashlytics to help improve its ' +
-            'reliability. Reports contain technical details such as the error, device model and ' +
-            'operating system version, and do not contain your financial data.',
-    }],
+    trailing: [crashReports('Lagom')],
     deleteLede: 'Your accounts, transactions and categories live on your own device, so most of what ' +
                 'Lagom holds needs no request. This page is honest about which is which.',
     deleteLocal: [
