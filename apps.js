@@ -243,14 +243,15 @@ const RECIPIENTS = {
   },
 };
 
-// The "Crash reports" section is the same in every app that has the Settings switch. `extra` adds
-// what is specific to one app.
-const crashReports = (name, extra = '') => ({
+// The "Crash reports" section is the same in every app that has the Settings switch.
+const crashReports = (name) => ({
   title: 'Crash reports',
   body: name + ' sends crash reports through Firebase Crashlytics. They are on by default, and ' +
         'the app does not ask you first. You can switch them off at any time with "Send crash ' +
         'reports" in Settings. They are sent under legitimate interest in keeping the app working. ' +
-        'A report holds the error and your device model, never what you logged.' + extra,
+        'A report holds the error and your device model, never anything you enter in the app. ' +
+        'If Google Play\'s age signals show that the account belongs to a minor, ' + name + ' keeps ' +
+        'crash reports off and the switch stays off.',
 });
 
 const APPS = {
@@ -640,8 +641,7 @@ const APPS = {
                  'bank connection, which removes the connection from GoCardless. You can stop using the ' +
                  'AI features, in which case no transaction titles are sent to Anthropic. Uninstalling ' +
                  'Lagom removes the data on your device.',
-    trailing: [crashReports('Lagom', ' If Google Play\'s age signals show that the account belongs to ' +
-    'a minor, Lagom keeps crash reports off and the switch stays off.')],
+    trailing: [crashReports('Lagom')],
     deleteLede: 'Your accounts, transactions and categories live on your own device, so most of what ' +
                 'Lagom holds needs no request. This page is honest about which is which.',
     deleteLocal: [
