@@ -50,9 +50,8 @@
     <h2>How to ask</h2>
     <p><span id="request-why">Because there is no account, there is no name or email to look you up by. Fill this in and the
     text it produces is everything I need to find and delete what is yours.</span> Nothing you type here
-    leaves your browser — this page has no server. Copy the text and send it to the developer contact
-    details published with the app on its <a id="play-link" href="#">Google Play listing</a>. Google
-    requires those to be current, so they are the address that reaches me.</p>
+    leaves your browser — this page has no server. Copy the text and email it to
+    <a id="contact-link" href="#"></a>.</p>
 
     <form id="form" autocomplete="off">
       <div id="fields"></div>
@@ -63,7 +62,7 @@
     <pre class="request" id="out"></pre>
     <div class="row">
       <button type="button" id="copy">Copy request</button>
-      <a id="play-button" href="#" target="_blank" rel="noopener">Open the Play listing</a>
+      <a id="contact-button" href="#">Open your email app</a>
       <span class="copied" id="copied" hidden>Copied.</span>
     </div>
     <p>Requests are actioned within 30 days, as the GDPR requires.</p>
@@ -108,7 +107,6 @@ if (!app) {
 function render(a) {
   const procs = a.processors.map((k) => PROCESSORS[k]);
   const recips = (a.recipients || []).map((k) => RECIPIENTS[k]);
-  const play = PLAY(a.id);
 
   document.title = a.name + ' — Requesting deletion of your data';
   $('meta').textContent = a.name + ' · last updated ' + UPDATED;
@@ -138,7 +136,10 @@ function render(a) {
   }
 
   if (a.requestWhy) $('request-why').textContent = a.requestWhy;
-  for (const link of [$('play-link'), $('play-button')]) link.href = play;
+  $('contact-link').textContent = CONTACT;
+  for (const link of [$('contact-link'), $('contact-button')]) {
+    link.href = 'mailto:' + CONTACT + '?subject=' + encodeURIComponent('Data deletion request — ' + a.name);
+  }
   $('cannot').hidden = !a.processors.includes('revenuecat');
 
   const fields = procs.flatMap((p) => p.fields);

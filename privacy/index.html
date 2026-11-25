@@ -42,7 +42,6 @@ if (!app) {
 function render(a) {
   const procs = a.processors.map((k) => PROCESSORS[k]);
   const recips = (a.recipients || []).map((k) => RECIPIENTS[k]);
-  const play = PLAY(a.id);
   const li = (items) => items.map((t) => `<li>${t}</li>`).join('');
   const list = (arr) => arr.length < 2 ? arr.join('') : arr.slice(0, -1).join(', ') + ' and ' + arr.at(-1);
   const names = list(procs.map((p) => p.name));
@@ -59,9 +58,7 @@ function render(a) {
 
 <h2>Who is responsible</h2>
 <p>${a.name} is developed and published by ${AUTHOR}, an individual developer. For anything in this
-policy, including requests about your data, use the developer contact details published with the app
-on its <a href="${play}">Google Play listing</a>. Google requires those to be current, so they are the
-address that reaches me.</p>
+policy, including requests about your data, write to ${CONTACT_LINK}.</p>
 
 <h2>What stays on your device</h2>
 ${a.localIntro || `<p>Everything you create in ${a.name} is stored on your device and is never transmitted to me or to
@@ -121,8 +118,8 @@ give them to me, and ${a.name} never asks for them.</p>` : ''}
 <p>Under the GDPR you can ask for access to, correction of, or deletion of personal data held about
 you, and you can object to processing. ${rights ? `In practice this concerns only ${rights},
 since nothing else reaches me.` : 'In practice there is nothing for me to access, correct or delete, since nothing reaches me.'}
-${recips.map((r) => r.rights).join(' ')} Write to me using the developer contact details on ${a.name}'s Google
-Play listing and I will action it within 30 days. You can also complain to your national data
+${recips.map((r) => r.rights).join(' ')} Write to me at ${CONTACT_LINK} and I
+will action it within 30 days. You can also complain to your national data
 protection authority; in Sweden that is
 <a href="https://www.imy.se/">Integritetsskyddsmyndigheten (IMY)</a>.</p>
 <p>${a.rightsLocal || `Your ${a.thing} need no request: deleting one in the app deletes it outright, and uninstalling

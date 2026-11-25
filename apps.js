@@ -3,9 +3,10 @@
 //
 // Text fields may contain inline HTML (links, <strong>); the pages insert them as such.
 
-const UPDATED = '22 November 2026';
+const UPDATED = '25 November 2026';
 const AUTHOR = 'Zoltan Demant';
-const PLAY = (id) => 'https://play.google.com/store/apps/details?id=' + id;
+const CONTACT = 'info@progression.app';
+const CONTACT_LINK = `<a href="mailto:${CONTACT}">${CONTACT}</a>`;
 
 // A processor holds something on my behalf. `receives`/`why` go in the policy's table, `deletes`
 // in the deletion page's table, and `fields` are what the user must supply so I can find their
@@ -14,15 +15,15 @@ const PROCESSORS = {
   revenuecat: {
     name: 'RevenueCat',
     policy: 'https://www.revenuecat.com/privacy',
-    receives: 'Your purchase history and an anonymous, randomly generated identifier for your ' +
-              'installation, together with the app version, Android version, device model and language ' +
+    receives: 'Your purchase history and a random identifier for your installation that is not ' +
+              'linked to your name, together with the app version, Android version, device model and language ' +
               'of the request, and the IP address it comes from. No name, no email, no account.',
     why: 'To know whether you have paid for {product}, and to restore that purchase on a new device.',
     basis: 'Purchase data is processed to perform the contract you enter into when you buy {product}, ' +
            'and is retained while the purchase remains valid and for as long as tax and accounting ' +
            'rules require.',
     deletes: {
-      what: 'Your purchase record — an anonymous identifier and the fact that a purchase was made or restored',
+      what: 'Your purchase record — a random identifier and the fact that a purchase was made or restored',
       who: 'RevenueCat, on my behalf',
       when: 'Deleted when you ask',
     },
@@ -63,21 +64,24 @@ const PROCESSORS = {
             'countries.',
     receives: 'Crash reports, and reports of errors the app caught and recovered from: a stack trace, ' +
               'your device model, your Android version, the {app} version, and a random identifier ' +
-              'Firebase creates for your installation. No name, no email, no account, and nothing you ' +
-              'have {made}.',
-    why: 'To find out that the app broke, and where, so it can be fixed.',
+              'Firebase creates for your installation. Each time you open the app, Firebase also ' +
+              'receives a session event: the time, your device and app versions, and that ' +
+              'identifier. No name, no email, no account, and nothing you have {made}.',
+    why: 'To find out that the app broke, and where, so it can be fixed. Session events show how ' +
+         'often it breaks.',
     basis: 'Crash reports are processed under legitimate interest in keeping the app working, and are ' +
            'retained by Crashlytics for 90 days.',
     deletes: {
-      what: 'Crash and error reports — a stack trace, device model, Android version, app version and ' +
-            'an installation identifier',
+      what: 'Crash and error reports, and session events — a stack trace, device model, Android ' +
+            'version, app version, the time and an installation identifier',
       who: 'Google, on my behalf',
-      when: 'Deleted automatically after 90 days, or sooner when you ask',
+      when: 'Crash and error reports are deleted automatically after 90 days, or sooner when you ask. ' +
+            'Google sets how long session events are kept',
     },
     fields: [
       { key: 'device', label: 'Your device model', hint: 'For example "Pixel 8" or "Galaxy S24".' },
       { key: 'when', label: 'Roughly when it crashed', hint: 'A date, or "around mid-August". Reports ' +
-        'carry no identifier that ties them to a person, so this is how I find the ones that are yours.' },
+        'carry a random installation identifier but no name, so this is how I find the ones that are yours.' },
     ],
     rights: 'any crash reports',
   },
@@ -249,6 +253,7 @@ const crashReports = (name) => ({
   body: name + ' sends crash reports through Firebase Crashlytics. They are on by default, and ' +
         'the app does not ask you first. You can switch them off at any time with "Send crash ' +
         'reports" in Settings. They are sent under legitimate interest in keeping the app working. ' +
+        'While they are on, Firebase also receives a session event each time you open the app. ' +
         'A report holds the error and your device model, never anything you enter in the app. ' +
         'If Google Play\'s age signals show that the account belongs to a minor, ' + name + ' keeps ' +
         'crash reports off and the switch stays off.',
@@ -340,7 +345,7 @@ const APPS = {
             'when you choose to share it. It is not uploaded anywhere.',
     }],
     notDo: [
-      'No analytics or usage tracking. I do not know which screens you open or how often you log.',
+      'No analytics or usage tracking. I do not know which screens you open or what you log.',
       'No location access, no contacts, no photos, no microphone.',
     ],
     permissions: [
