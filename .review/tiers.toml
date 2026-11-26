@@ -1,0 +1,14 @@
+check = ["true"]
+auto_merge = false
+
+[[red]]
+name = "Legal"
+paths = ["privacy/**", "terms/**", "delete-data/**"]
+
+[[red]]
+name = "App links"
+paths = [".well-known/**"]
+
+[[red]]
+name = "Merge gate"
+paths = [".review/**", "_config.yml"]
